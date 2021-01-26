@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -48,6 +48,35 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
   const classes = useStyles();
+
+  //state variables
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  //onChangeEvents
+  const emailHandler = (email) => {
+    console.log("User Name " + email);
+    setEmail(email);
+  };
+
+  const passwordHandler = (userPassword) => {
+    console.log("User Password " + userPassword);
+    setPassword(userPassword);
+  };
+
+  //OnSubmitEvents
+  const LoginHandler = (e) => {
+    e.preventDefault();
+    console.log("Submitted");
+
+    if (email !== "" && password !== "") {
+      console.log("User Name " + email);
+      console.log("User Password " + password);
+    } else {
+      console.log("Invalid parameters");
+    }
+  };
+
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -59,7 +88,7 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form onSubmit={LoginHandler} className={classes.form} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -70,6 +99,9 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => {
+                emailHandler(e.target.value);
+              }}
             />
             <TextField
               variant="outlined"
@@ -81,6 +113,9 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => {
+                passwordHandler(e.target.value);
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -92,6 +127,7 @@ const Login = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onSubmit={LoginHandler}
             >
               Sign In
             </Button>
