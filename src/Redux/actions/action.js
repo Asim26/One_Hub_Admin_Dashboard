@@ -1,4 +1,5 @@
 import {FETCH_DATA,FETCH_BRAND} from './action-types'
+import {} from './action-types'
 
 export const fetchUsers =(data)=>{
 
@@ -15,4 +16,5 @@ export function fetchBrand(response) {
       payload: response
       
     };
-  }
+}
+

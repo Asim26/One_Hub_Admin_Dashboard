@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -12,6 +12,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
+import {CLIENT_ID} from '../../Utilities/constants';
+import { loginRequest } from "../../Services/dataService";
+import { NETWORK_ERROR } from "../../Utilities/constants";
 
 function Copyright() {
   return (
@@ -46,8 +50,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
+
+  //state variables
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  //onChangeEvents
+  const emailHandler = (email) => {
+    setEmail(email);
+  };
+
+  const passwordHandler = (userPassword) => {
+    setPassword(userPassword);
+  };
+
+  //OnSubmitEvents
+  const LoginHandler = async(e) => {
+    e.preventDefault();
+    
+    
+    if (email !== '' && password !== '') {
+      
+      let loginObj = {
+        email: email,
+        password: password,
+        client_id: CLIENT_ID,
+      };
+
+      let loginResponse = await loginRequest(loginObj);
+
+      
+      if (loginResponse === NETWORK_ERROR) {
+        
+      }
+      else {
+        const status = loginResponse.data.metadata.status;
+        
+        const userCredentials = loginResponse.data.payload.data.user;
+        
+
+      }
+    } 
+    else 
+    {
+
+    }
+  };
+
   return (
     <div>
       <Container component="main" maxWidth="xs">
@@ -59,7 +111,7 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form onSubmit={LoginHandler} className={classes.form} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -70,6 +122,9 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => {
+                emailHandler(e.target.value);
+              }}
             />
             <TextField
               variant="outlined"
@@ -81,6 +136,9 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => {
+                passwordHandler(e.target.value);
+              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -92,6 +150,7 @@ const Login = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onSubmit={LoginHandler}
             >
               Sign In
             </Button>

@@ -1,7 +1,7 @@
 import React,{useEffect} from 'react'
 import { connect } from "react-redux";
 import {fetchBrand} from '../../redux/actions/action';
-import {FetchBrandRequest} from '../../Services/DataService'
+import {FetchBrandRequest} from '../../Services/dataService'
 import { NETWORK_ERROR } from '../../Utilities/constants';
 
 
