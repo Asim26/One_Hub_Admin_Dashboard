@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { BASE_URL1, LOGIN_URL, BASE_URL1,FETCH_BRAND  } from "../Utilities/constant";
+import { BASE_URL1, LOGIN_URL,FETCH_BRAND  } from "../Utilities/constant";
 import { NETWORK_ERROR } from "../Utilities/constant";
 
 export async function loginRequest(obj) {
