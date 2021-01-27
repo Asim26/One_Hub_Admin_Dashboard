@@ -13,6 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import {CLIENT_ID} from '../../Utilities/constants';
+import { loginRequest } from "../../Services/dataService";
+import { NETWORK_ERROR } from "../../Utilities/constants";
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -46,34 +50,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
 
   //state variables
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   //onChangeEvents
   const emailHandler = (email) => {
-    console.log("User Name " + email);
     setEmail(email);
   };
 
   const passwordHandler = (userPassword) => {
-    console.log("User Password " + userPassword);
     setPassword(userPassword);
   };
 
   //OnSubmitEvents
-  const LoginHandler = (e) => {
+  const LoginHandler = async(e) => {
     e.preventDefault();
-    console.log("Submitted");
+    
+    
+    if (email !== '' && password !== '') {
+      
+      let loginObj = {
+        email: email,
+        password: password,
+        client_id: CLIENT_ID,
+      };
 
-    if (email !== "" && password !== "") {
-      console.log("User Name " + email);
-      console.log("User Password " + password);
-    } else {
-      console.log("Invalid parameters");
+      let loginResponse = await loginRequest(loginObj);
+
+      
+      if (loginResponse === NETWORK_ERROR) {
+        
+      }
+      else {
+        const status = loginResponse.data.metadata.status;
+        
+        const userCredentials = loginResponse.data.payload.data.user;
+        
+
+      }
+    } 
+    else 
+    {
+
     }
   };
 
