@@ -1,3 +1,4 @@
+import {FETCH_DATA,FETCH_BRAND} from './action-types'
 import {} from './action-types'
 
 export const fetchUsers =(data)=>{
@@ -7,3 +8,13 @@ export const fetchUsers =(data)=>{
         data:data
     }
 }
+
+export function fetchBrand(response) {
+   // console.log("RESPONSE=>",response);
+    return {
+      type: FETCH_BRAND,
+      payload: response
+      
+    };
+}
+
