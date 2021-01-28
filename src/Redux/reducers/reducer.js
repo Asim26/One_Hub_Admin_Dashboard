@@ -1,17 +1,27 @@
-import {FETCH_DATA} from '../actions/action-types';
+import {LOGIN_SUCCESS,FETCH_ORDER_SUMMARY} from '../actions/action-types';
 
 const initialState = {
-    fetchUsersData: [],
+    user:[],
+    orderSummary:[]
+
 }
 
-export default function fetchUsersData(state = [], action) {
-    switch (action.type) {
-        case FETCH_DATA:
-        console.log('fetch user data reducer',state)
-        return {
+export default function myReducer(state = [], action) {
+    switch (action.type) {        
+        case LOGIN_SUCCESS:
+            return {
+              ...state,
+              user: action.payload,
+            };
+
+            case FETCH_ORDER_SUMMARY: {
+              return {
                 ...state,
-                fetchUsersData: action.data
-        }         
+                orderSummary: action.payload,
+              };
+            }
+          
+
         default:
             return state
     }

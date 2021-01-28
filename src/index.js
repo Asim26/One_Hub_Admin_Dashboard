@@ -9,7 +9,8 @@ import {Provider} from 'react-redux'
 import rootReducer from './Redux/reducers/index'
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store=createStore(rootReducer,composeEnhancers())
-//
+
+console.log("store=> ",store.getState());
 
 ReactDOM.render(
   <Provider store={store}>

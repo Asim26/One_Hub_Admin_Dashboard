@@ -13,9 +13,20 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import {CLIENT_ID} from '../../Utilities/constants';
-import { loginRequest } from "../../Services/dataService";
-import { NETWORK_ERROR } from "../../Utilities/constants";
+import { CLIENT_ID } from "../../Utilities/constants";
+
+import { loginRequest,
+   fetchOrderSummaryRequest,
+   listProductRequest,
+   fetchOrdersRequest,
+   FetchBrandRequest,
+   userFeedbackRequest } 
+   from "../../Services/dataService";
+
+   import { NETWORK_ERROR } from "../../Utilities/constants";
+
+import { connect } from "react-redux";
+import { loginSuccess,fetchOrderSummary } from "../../Redux/actions/action";
 
 function Copyright() {
   return (
@@ -68,35 +79,100 @@ const Login = (props) => {
   };
 
   //OnSubmitEvents
-  const LoginHandler = async(e) => {
+  const LoginHandler = async (e) => {
     e.preventDefault();
-    
-    
-    if (email !== '' && password !== '') {
-      
+
+    if (email !== "" && password !== "") {
       let loginObj = {
         email: email,
         password: password,
         client_id: CLIENT_ID,
       };
 
+      //API CALL
       let loginResponse = await loginRequest(loginObj);
 
+      //EXTRACTED ROLE & TOKEN FROM API
+      const role = loginResponse.data.payload.data.admin.role;
+      const token = loginResponse.data.payload.data.token;
       
+      //CHECKING LOGIN RESPONSE 
+
       if (loginResponse === NETWORK_ERROR) {
-        
-      }
-      else {
+        //LOGIN RESPONSE IF SECTION
+
+      } 
+      else
+      {
+        //LOGIN RESPONSE ELSE SECTION
         const status = loginResponse.data.metadata.status;
-        
-        const userCredentials = loginResponse.data.payload.data.user;
-        
+        if (status === "SUCCESS") {
+          props.loginSuccess(loginResponse);
 
+          if(role === 'SuperAdmin'){
+            //ROLE IF
+            const obj = {
+              days: "7",
+            };
+
+            const orderSummaryResponse = await fetchOrderSummaryRequest(obj,token);
+            if (orderSummaryResponse === NETWORK_ERROR) {
+
+            } else {
+                props.fetchOrderSummary(orderSummaryResponse);
+            }
+
+            const productResponse = await listProductRequest(token);
+            if (productResponse === NETWORK_ERROR) {
+             
+            } else {
+              
+
+            }
+
+            const ordersResponse = await fetchOrdersRequest(token);
+            if (ordersResponse === NETWORK_ERROR) {
+              
+            } else {
+              
+              
+            }
+
+            const brandResponse = await FetchBrandRequest(token);
+            if (brandResponse === NETWORK_ERROR) {
+
+            } 
+            else {
+              
+            }
+
+
+            const feedbackResponse = await userFeedbackRequest(token);
+            if (feedbackResponse === NETWORK_ERROR) {
+              
+            } 
+            else{
+              
+            }
+
+            
+
+          }
+          else if(role === "ADMIN"){
+            //ELSE IF ROLE
+
+          }
+         
+        }
+        else{
+          // ELSE STATUS
+        } 
       }
-    } 
-    else 
-    {
 
+    }
+   else 
+   {
+      //ELSE OF 1ST IF
     }
   };
 
@@ -176,4 +252,18 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => {
+  return {
+    user: state,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loginSuccess: (userData) => dispatch(loginSuccess(userData)),
+    fetchOrderSummary: (orderSummaryData) =>
+      dispatch(fetchOrderSummary(orderSummaryData)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default Login;

@@ -1,9 +1,18 @@
-import {} from './action-types'
+import {LOGIN_SUCCESS,FETCH_ORDER_SUMMARY} from './action-types'
 
-export const fetchUsers =(data)=>{
-
+export function loginSuccess(data) {
+  
     return {
-        type:FETCH_DATA,
-        data:data
-    }
-}
+      type: LOGIN_SUCCESS,
+      payload: data
+    };
+  }
+
+  export function fetchOrderSummary(data) {
+   
+    return {
+
+      type: FETCH_ORDER_SUMMARY,
+      payload: data,
+    };
+  }

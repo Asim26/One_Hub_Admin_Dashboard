@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
-import fetchUsersData from './reducer'
+import myReducer from './reducer'
 
 export default combineReducers({
-    fetchUsersData
+    myReducer
 })
