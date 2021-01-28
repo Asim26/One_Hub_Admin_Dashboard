@@ -17,6 +17,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 
+
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleIcon from "@material-ui/icons/People";
@@ -91,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(props) {
+ const Header=(props)=> {
 
 
   const classes = useStyles();
@@ -216,8 +217,11 @@ export default function Header(props) {
         <div className={classes.drawerHeader} />
    
         {props.children}
+        
        
       </main>
     </div>
   );
 }
+
+export default Header;

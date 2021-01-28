@@ -2,7 +2,7 @@ import {FETCH_DATA,FETCH_BRAND} from '../actions/action-types';
 
 const initialState = {
     fetchUsersData: [],
-    brandName :'', 
+    brands : [], 
 }
 
 export default function fetchUsersData(state = initialState, action) {
@@ -18,7 +18,7 @@ export default function fetchUsersData(state = initialState, action) {
            // console.log("action.payload",action.payload);
             return {
                 ... state,
-                brandName : action.payload
+                brands : action.payload
 
             }        
         default:

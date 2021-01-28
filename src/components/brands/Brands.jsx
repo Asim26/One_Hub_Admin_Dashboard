@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import {fetchBrand} from '../../redux/actions/action';
 import {FetchBrandRequest} from '../../Services/data'
 import { NETWORK_ERROR } from '../../Utilities/constant';
+import BrandInformation from './BrandInformation';
+import {Link} from 'react-router-dom';
 
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +21,9 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import './Brands.css';
+
+
 
 const useRowStyles = makeStyles({
   root: {
@@ -37,15 +42,15 @@ function Row(props) {
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
-        <TableCell>
+        <TableCell className ='Brands-tableHead'>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell  component="th" scope="row">
           {brand.name}
         </TableCell>
-        <TableCell align="right">{brand.timings}</TableCell>
+        <TableCell align="right">{brand.timings} </TableCell>
         <TableCell align="right">{brand.status}</TableCell>
         <TableCell align="right">Edit Brand</TableCell>
         <TableCell align="right">Delete Brand</TableCell>
@@ -54,40 +59,7 @@ function Row(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
-              <Typography variant="h6" gutterBottom component="div">
-                Brand Details
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell variant='h6' >Name</TableCell>
-                    <TableCell >On Sale</TableCell>
-                    <TableCell >Address</TableCell>
-                    <TableCell >Contract Type</TableCell>
-                    <TableCell >Contact No</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-
-           <TableRow className={classes.root}>
-       
-        {/* <TableCell component="th" scope="row">
-          {brand.name}
-        </TableCell> */}
-        <TableCell > {brand.name}</TableCell>
-        <TableCell >{brand.on_sale ? <p>yes</p> :<p> No</p>}</TableCell>
-        <TableCell >{brand.timings}</TableCell>
-        <TableCell >{brand.contract_type}</TableCell>
-        <TableCell >{brand.contact_no}</TableCell>
-        
-        </TableRow>
-        <h2>Introduction</h2>
-        <Typography variant="h9" gutterBottom component="div">
-        <p >{brand.brand_introduction}</p>           
-              </Typography>
-     
-                </TableBody>
-              </Table>
+              <BrandInformation brand = {brand}></BrandInformation>
             </Box>
           </Collapse>
         </TableCell>
@@ -106,7 +78,7 @@ const Brands =(props) => {
         const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE2NTExMzYsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.K8BSSZ3d4MZcrmWwWcC6cnzqOZqluqopugCTKEWfv_tQ1KjcooH2k3G10NhHeoolniT-Prc2w2ZI7scSofueJw";
         const brandResponse = await FetchBrandRequest(token);
        
-  
+      console.log("brand response,",brandResponse);
         if (brandResponse === NETWORK_ERROR) {
           alert(NETWORK_ERROR);
           
@@ -120,21 +92,25 @@ const Brands =(props) => {
   
 
   return (
-      
+    <div>
+      <Link to ='/createbrand'>
+      <button>Create New Brand</button>
+      </Link>
     <TableContainer component={Paper}>
+      {console.log("props=>",props)}
       
-      <Table aria-label="collapsible table">
+      <Table  aria-label="collapsible table">
         <TableHead>
         
                 
               
           <TableRow>
             <TableCell />
-            <TableCell>Name</TableCell>
-            <TableCell align="right">Timing</TableCell>
-            <TableCell align="right">Status</TableCell>
-            <TableCell align="right">Edit Brand</TableCell>
-            <TableCell align="right">Delete Brand</TableCell>
+            <TableCell><span  className ='Brands-tableHead'>Name</span></TableCell>
+            <TableCell align="right"><span  className ='Brands-tableHead'>Timing</span></TableCell>
+            <TableCell align="right"><span  className ='Brands-tableHead'>Status</span></TableCell>
+            <TableCell align="right"><span  className ='Brands-tableHead'>Edit Brand</span></TableCell>
+            <TableCell align="right"><span  className ='Brands-tableHead'>Delete Brand</span></TableCell>
           </TableRow>
        
         </TableHead>
@@ -145,6 +121,7 @@ const Brands =(props) => {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 }
 

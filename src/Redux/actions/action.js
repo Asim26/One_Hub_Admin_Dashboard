@@ -10,7 +10,7 @@ export const fetchUsers =(data)=>{
 }
 
 export function fetchBrand(response) {
-   // console.log("RESPONSE=>",response);
+   console.log("RESPONSE=>",response);
     return {
       type: FETCH_BRAND,
       payload: response
