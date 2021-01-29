@@ -119,7 +119,7 @@ const Login = (props) => {
             if (orderSummaryResponse === NETWORK_ERROR) {
 
             } else {
-                props.fetchOrderSummary(orderSummaryResponse);
+                // props.fetchOrderSummary(orderSummaryResponse);
             }
 
             const productResponse = await listProductRequest(token);
@@ -261,8 +261,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loginSuccess: (userData) => dispatch(loginSuccess(userData)),
-    fetchOrderSummary: (orderSummaryData) =>
-      dispatch(fetchOrderSummary(orderSummaryData)),
+  //   fetchOrderSummary: (orderSummaryData) =>
+  //     dispatch(fetchOrderSummary(orderSummaryData)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

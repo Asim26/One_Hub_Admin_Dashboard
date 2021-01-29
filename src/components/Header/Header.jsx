@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+export default function Header(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -169,12 +169,16 @@ export default function Header() {
               <ChevronLeftIcon />
             </IconButton>
           </div>
+
+          
           <SideBar />
           <Divider />
         </Drawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}></Container>
+          <Container maxWidth="lg" className={classes.container}>
+            {props.children}
+          </Container>
         </main>
       </div>
     </div>

@@ -21,8 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Dashboard=(props)=> {
-  
+const Dashboard = (props) => {
   const classes = useStyles();
 
   useEffect(async () => {
@@ -34,48 +33,54 @@ const Dashboard=(props)=> {
 
     const orderSummaryResponse = await fetchOrderSummaryRequest(obj, token);
     if (orderSummaryResponse === NETWORK_ERROR) {
-     
+      alert("NETWORK ERROR");
     } else {
-      
-      props.fetchOrderSummary(orderSummaryResponse.data.payload.data.orderList)
+      props.fetchOrderSummary(orderSummaryResponse.data.payload.data.orderList);
     }
   }, []);
 
   return (
     <div>
-      {/* {props.orderSummaryData.myReducer.orderSummary} */}
-      <Header />
-
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* {props.orderSummaryData.map((ordersSummary) => (
-            <TableRow key={ordersSummary.order_id}>
-              <TableCell component="th" scope="row">
-                
-              </TableCell>
-              <TableCell align="right">{ordersSummary.order_id}</TableCell>
-            </TableRow>
-          ))} */}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Header>
+        <h2 style={{ align: "center" }}>Order Summary</h2>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell align="right">Price</TableCell>
+                <TableCell align="right">Status</TableCell>
+                <TableCell align="right">Date Created</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.orderSummary.map((ordersSummary) => (
+                <TableRow key={ordersSummary.order_id}>
+                  <TableCell component="th" scope="row">
+                    {ordersSummary.order_id}
+                  </TableCell>
+                  <TableCell align="right">
+                    {ordersSummary.total_price}
+                  </TableCell>
+                  <TableCell align="right">{ordersSummary.status}</TableCell>
+                  <TableCell align="right">
+                    {ordersSummary.date_created}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Header>
     </div>
   );
-}
+};
 
-const mapStateToProps = (state) => ({
-  orderSummaryData: state
-});
+const mapStateToProps = (state) => {
+  return {
+    orderSummary: state.myReducerOne.orderSummary,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {

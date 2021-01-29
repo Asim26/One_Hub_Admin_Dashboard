@@ -10,49 +10,72 @@ import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 
+import {Link} from "react-router-dom";
+
 export default function SideBar() {
   return (
     <div>
       <div>
-        <ListItem button>
+      
+       <ListItem button>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
-          <ListItemText primary="Dashboard" />
+          <Link to="/">
+            <ListItemText primary="Dashboard" />
+          </Link>
         </ListItem>
+
+        
         <ListItem button>
           <ListItemIcon>
             <ShoppingCartIcon />
           </ListItemIcon>
-          <ListItemText primary="Orders" />
+          <Link to="/import">
+            <ListItemText primary="Import" />
+          </Link>
         </ListItem>
+
+        
         <ListItem button>
           <ListItemIcon>
-            <PeopleIcon />
+            <ShoppingCartIcon />
           </ListItemIcon>
-          <ListItemText primary="Customers" />
+          <Link to="/orders">
+              <ListItemText primary="Orders" />
+          </Link>
         </ListItem>
+        
+
         <ListItem button>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
-          <ListItemText primary="Reports" />
+          <Link to="/reports">
+            <ListItemText primary="Reports" />
+          </Link>
         </ListItem>
+
         <ListItem button>
           <ListItemIcon>
             <LayersIcon />
           </ListItemIcon>
-          <ListItemText primary="Integrations" />
+          <Link to="/products">
+            <ListItemText primary="Products" />
+          </Link>
         </ListItem>
       </div>
 
       <div>
-        <ListSubheader inset>Saved reports</ListSubheader>
+        {/* <ListSubheader inset>Saved reports</ListSubheader> */}
         <ListItem button>
           <ListItemIcon>
             <AssignmentIcon />
           </ListItemIcon>
-          <ListItemText primary="Current month" />
+          <Link to="/Brands">
+          <ListItemText primary="Brands" />
+          </Link>
+
         </ListItem>
         <ListItem button>
           <ListItemIcon>
