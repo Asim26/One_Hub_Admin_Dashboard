@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
 const BrandInformation=(props)=> {
     const classes = useStyles();
     const {brand} = props;
-    console.log("Brand Information :21 | Brand => ",props.brand);
   return (
     <div className={classes.root}>
         <div className= "BrandInformation-container">

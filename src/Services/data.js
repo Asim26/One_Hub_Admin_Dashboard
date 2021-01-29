@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { BASE_URL1, LOGIN_URL,FETCH_BRAND  } from "../Utilities/constant";
+import { BASE_URL1, LOGIN_URL,FETCH_BRAND,CREATE_BRAND  } from "../Utilities/constant";
 import { NETWORK_ERROR } from "../Utilities/constant";
 
 export async function loginRequest(obj) {
@@ -23,5 +23,20 @@ export async function FetchBrandRequest(token) {
     return await axios.post(url, null, config);
   } catch (error) {
     return error;
+  }
+}
+
+export async function createBrandRequest(obj,token) {
+  const config = {
+    headers: {
+      "x-access-token": "bearer " + token,
+    },
+  };
+
+  try {
+    const url = BASE_URL1 + CREATE_BRAND;
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
   }
 }
