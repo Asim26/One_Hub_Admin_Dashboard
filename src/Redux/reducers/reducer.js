@@ -3,12 +3,14 @@ import {
   LOGIN_SUCCESS,
   FETCH_ORDER_SUMMARY,
   LIST_OF_PRODUCTS,
+  LIST_OF_ORDERS
 } from "../actions/action-types";
 
 const initialState = {
   user: [],
   orderSummary: [],
   listOfProducts: [],
+  listOfOrders:[]
 };
 
 export default function myReducerOne(state = initialState, action) {
@@ -29,6 +31,12 @@ export default function myReducerOne(state = initialState, action) {
       return {
         ...state,
         listOfProducts: action.payload,
+      };
+
+      case LIST_OF_ORDERS:
+      return {
+        ...state,
+        listOfOrders: action.payload,
       };
 
     default:
