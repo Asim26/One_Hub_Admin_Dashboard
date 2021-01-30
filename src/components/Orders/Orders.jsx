@@ -30,21 +30,6 @@ const useRowStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
-    ],
-  };
-}
-
 const Row = (props) => {
   const { user } = props.row;
   const [open, setOpen] = React.useState(false);
@@ -61,14 +46,13 @@ const Row = (props) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-
         <TableCell component="th" scope="row">
           {user._id}
         </TableCell>
-        <TableCell align="center">{user.name}</TableCell>
-        <TableCell align="center">{user.phone}</TableCell>
-        <TableCell align="center">{props.row.total_price}</TableCell>
-        <TableCell align="center">{props.row.date_created}</TableCell>
+        <TableCell align="right"> {user.name} </TableCell>
+        <TableCell align="right"> {user.phone} </TableCell>
+        <TableCell align="right">{props.row.total_price}</TableCell>
+        <TableCell align="right">{props.row.date_created}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -82,8 +66,8 @@ const Row = (props) => {
                   <TableRow>
                     <TableCell>Name</TableCell>
                     <TableCell>Category</TableCell>
-                    <TableCell align="right">Quantity</TableCell>
-                    <TableCell align="right">Color</TableCell>
+                    <TableCell align="left">Quantity</TableCell>
+                    <TableCell align="left">Color</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -93,8 +77,8 @@ const Row = (props) => {
                         {historyRow.brand}
                       </TableCell>
                       <TableCell>{historyRow.title}</TableCell>
-                      <TableCell align="right">{historyRow.quantity}</TableCell>
-                      <TableCell align="right">{historyRow.variants.color}</TableCell>
+                      <TableCell align="left">{historyRow.quantity}</TableCell>
+                      <TableCell align="left"> {historyRow.variants.color}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -129,17 +113,15 @@ const Orders = (props) => {
               <TableRow>
                 <TableCell />
                 <TableCell>Id</TableCell>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Phone</TableCell>
-                <TableCell align="center">Price</TableCell>
-                <TableCell align="center">Date</TableCell>
+                <TableCell align="right">Name</TableCell>
+                <TableCell align="right">Phone</TableCell>
+                <TableCell align="right">Price</TableCell>
+                <TableCell align="right">Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {props.ListOfOrders.map((orderList) => (
-                <div>
-                  <Row key={orderList.user.name} row={orderList} />
-                </div>
+                <Row key={orderList.user.name} row={orderList} />
               ))}
             </TableBody>
           </Table>
