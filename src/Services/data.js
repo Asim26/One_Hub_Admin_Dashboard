@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { BASE_URL1, LOGIN_URL,FETCH_BRAND,CREATE_BRAND  } from "../Utilities/constant";
+import { BASE_URL1, LOGIN_URL,FETCH_BRAND,CREATE_BRAND,EDIT_BRAND,DELETE_BRAND } from "../Utilities/constant";
 import { NETWORK_ERROR } from "../Utilities/constant";
 
 export async function loginRequest(obj) {
@@ -35,6 +35,35 @@ export async function createBrandRequest(obj,token) {
 
   try {
     const url = BASE_URL1 + CREATE_BRAND;
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+
+export async function editBrandRequest(obj, token) {
+  try {
+    const url = BASE_URL1 + EDIT_BRAND;
+    const config = {
+      headers: {
+        "x-access-token": "bearer " + token,
+      },
+    };
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+
+export async function deleteBrandRequest(obj,token) {
+  const config = {
+    headers: {
+      "x-access-token": "bearer " + token,
+    },
+  };
+
+  try {
+    const url = BASE_URL1 + DELETE_BRAND;
     return await axios.post(url, obj, config);
   } catch (e) {
     return NETWORK_ERROR;

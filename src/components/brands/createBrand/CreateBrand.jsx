@@ -1,5 +1,6 @@
 import React, { useState} from "react";
 import {categoryOptions,fullFilledByOptions} from '../../../Utilities/OptionConstants';
+import {NETWORK_ERROR} from '../../../Utilities/constant'
 import {useHistory} from 'react-router-dom';
 import {createBrandRequest} from '../../../Services/data';
 import Creatable from 'react-select/creatable';
@@ -215,6 +216,23 @@ const CreateBrand=props =>{
         return time.join (''); 
     }
     
+    
+  const validateForm = (brands) =>{
+    if(brands.name.length === 0 || brands.email.length === 0 || brands.password.lenth===0|| brands.location.length === 0 || 
+      brands.branches.length===0 || brands.cities.length === 0  ||
+      brands.categories.length===0 ||brands.allow_multiple_brands.length === 0||
+      (brands.allow_multiple_brands && brands.multiple_brands.length === 0) ||
+      brands.timings.length < 15 || brands.fulfilled_by.length === 0 ||
+      brands.contract_type.length === 0 || brands.on_sale.length === 0 || (brands.on_sale && (brands.sale_end_time.length === 0 || brands.sale_start_time.length===0)) ||
+      brands.sale_percentage.length === 0 || brands.minimum_orders.length === 0 || 
+      brands.commission_percentage.length === 0 || brands.brand_introduction.length=== 0 
+      || brands.contact_no.length === 0
+      )
+      return false
+    else 
+      return true
+  }
+
 
 
     const submitHandler =async (event)=>{
@@ -250,10 +268,30 @@ const CreateBrand=props =>{
             fulfilled_by: fullFilled,
         }
 
+
+
+        let valuesValidation= validateForm(brands); 
+
         const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE2NTExMzYsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.K8BSSZ3d4MZcrmWwWcC6cnzqOZqluqopugCTKEWfv_tQ1KjcooH2k3G10NhHeoolniT-Prc2w2ZI7scSofueJw";
-        let createBrandResponse = await createBrandRequest(brands,token);
-        const status = createBrandResponse.data.metadata.status;
-        history.push('./brands');
+
+
+        if(valuesValidation === true){
+
+          let createBrandResponse = await createBrandRequest(brands,token);
+          console.log("281: ",createBrandResponse);
+
+          if (createBrandResponse === NETWORK_ERROR) {
+           
+            alert(NETWORK_ERROR);
+          }else{
+            const status = createBrandResponse.data.metadata.status;
+            history.push('./brands');
+          } 
+          
+        }
+
+            
+      
 
     }
 
@@ -537,7 +575,7 @@ const CreateBrand=props =>{
             </Grid>
            
             </Grid>
-      ):( <div></div>) }
+      ):(<div></div>) }
 
 
 
@@ -626,4 +664,3 @@ const CreateBrand=props =>{
 }
 
   export default CreateBrand;
-  

@@ -1,9 +1,9 @@
-import {FETCH_DATA,FETCH_BRAND,CREATE_BRAND} from '../actions/action-types';
+import {FETCH_DATA,FETCH_BRAND,CREATE_BRAND,SINGLE_BRAND} from '../actions/action-types';
 
 const initialState = {
     fetchUsersData: [],
     brands : [], 
-    
+    singleBrand :'',
 }
 
 export default function fetchUsersData(state = initialState, action) {
@@ -28,7 +28,14 @@ export default function fetchUsersData(state = initialState, action) {
                   ...state,
                   createdBrand: newBrand,
                 };
-          }            
+          }
+        case SINGLE_BRAND:{
+          return{
+            ...state,
+            singleBrand : action.payload
+          }  
+
+        }              
         default:
             return state
     }
