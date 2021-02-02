@@ -6,7 +6,6 @@ import { fetchOrdersRequest } from "../../Services/dataService";
 import { connect } from "react-redux";
 import { listOfOrders } from "../../Redux/actions/action";
 
-import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import Collapse from "@material-ui/core/Collapse";
@@ -71,6 +70,7 @@ const Row = (props) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  
                   {props.row.order.map((historyRow) => (
                     <TableRow key={historyRow.brand}>
                       <TableCell component="th" scope="row">
@@ -78,7 +78,10 @@ const Row = (props) => {
                       </TableCell>
                       <TableCell>{historyRow.title}</TableCell>
                       <TableCell align="left">{historyRow.quantity}</TableCell>
-                      <TableCell align="left"> {historyRow.variants.color}</TableCell>
+                      <TableCell align="left">
+                        {" "}
+                        {historyRow.variants.color}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -121,7 +124,7 @@ const Orders = (props) => {
             </TableHead>
             <TableBody>
               {props.ListOfOrders.map((orderList) => (
-                <Row key={orderList.user.name} row={orderList} />
+                <Row key={Math.random()} row={orderList} />
               ))}
             </TableBody>
           </Table>

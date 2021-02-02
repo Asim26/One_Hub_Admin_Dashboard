@@ -148,7 +148,7 @@ export default function Header(props) {
               noWrap
               className={classes.title}
             >
-              Dashboard
+              {/* title */}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">

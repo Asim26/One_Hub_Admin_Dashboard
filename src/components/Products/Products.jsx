@@ -16,6 +16,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
 import Grid from "@material-ui/core/Grid";
+import { Link } from "react-router-dom";
+import CreateProduct from "./CreateProduct";
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +42,11 @@ const Products = (props) => {
     <div>
       <Header>
         <h2>Products</h2>
+        <Link to="/CreateProduct">
+        <Button variant="contained" color="primary" style={{'margin-bottom':'5%'}}>
+          Add Product
+        </Button>
+        </Link>
         <Grid container spacing={3}>
           {props.ListProducts.map((list) => (
             <Grid item md={4}>
@@ -74,7 +81,7 @@ const Products = (props) => {
                 </CardActionArea>
                 <CardActions>
                   <Button size="small" color="primary">
-                    Add
+                    Edit
                   </Button>
                   <Button size="small" color="primary">
                     Remove

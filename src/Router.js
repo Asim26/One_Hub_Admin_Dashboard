@@ -6,6 +6,7 @@ import Dashboard from "./Components/Dashboard/Dashboard";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Products from "./Components/Products/Products";
 import Orders from "./Components/Orders/Orders";
+import CreateProduct from "./Components/Products/CreateProduct";
 
 export default function AppRouter() {
   return (
@@ -16,6 +17,7 @@ export default function AppRouter() {
           <Route path="/SignUp" exact component={SignUp} />
           <Route path="/products" exact component={Products} />
           <Route path="/orders" exact component={Orders} />
+          <Route path="/CreateProduct" exact component={CreateProduct} />
           <Route path="/" exact component={Dashboard} />
         </Switch>
       </BrowserRouter>

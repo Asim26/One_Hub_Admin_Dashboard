@@ -1,4 +1,3 @@
-import { listOfProducts } from "../actions/action";
 import {
   LOGIN_SUCCESS,
   FETCH_ORDER_SUMMARY,
