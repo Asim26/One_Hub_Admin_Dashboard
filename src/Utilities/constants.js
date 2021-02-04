@@ -12,3 +12,5 @@ export const PRODUCT_SALES = "admin/api/v1/product/sales";
 export const GET_COMMISSION = "admin/api/v1/getCommission";
 export const BRAND_PRODUCTS = "admin/api/v1/brands/products";
 export const FETECH_REPORT = "admin/api/v1/fetchReport";
+export const UPLOAD_IMAGE_URL = "admin/api/v1/upload";
+export const CREATE_PRODUCT = "admin/api/v1/createProduct";

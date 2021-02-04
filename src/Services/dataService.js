@@ -9,7 +9,9 @@ import { BASE_URL1,
    PRODUCT_SALES,
    GET_COMMISSION,
    BRAND_PRODUCTS,
-   FETECH_REPORT
+   FETECH_REPORT,
+   UPLOAD_IMAGE_URL,
+   CREATE_PRODUCT
   } from "../Utilities/constants";
 
 import { NETWORK_ERROR } from "../Utilities/constants";
@@ -146,6 +148,34 @@ export async function fetchReportRequest(token) {
       },
     };
     return await axios.post(url, null, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+export async function uploadImageRequest(obj, token) {
+  try {
+    const url = BASE_URL1 + UPLOAD_IMAGE_URL;
+    const config = {
+      headers: {
+        "x-access-token": "bearer " + token,
+      },
+    };
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+
+export async function createProductRequest(obj,token) {
+  const config = {
+    headers: {
+      "x-access-token": "bearer " + token,
+    },
+  };
+
+  try {
+    const url = BASE_URL1 + CREATE_PRODUCT;
+    return await axios.post(url, obj, config);
   } catch (e) {
     return NETWORK_ERROR;
   }

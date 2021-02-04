@@ -80,9 +80,11 @@ const Products = (props) => {
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
-                  <Button size="small" color="primary">
-                    Edit
-                  </Button>
+                  <Link to="/EditProduct">
+                    <Button size="small" color="primary">
+                      Edit
+                    </Button>
+                  </Link>
                   <Button size="small" color="primary">
                     Remove
                   </Button>

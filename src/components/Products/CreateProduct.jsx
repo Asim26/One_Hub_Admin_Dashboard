@@ -16,6 +16,16 @@ import IconButton from "@material-ui/core/IconButton";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { Category } from "@material-ui/icons";
 
+import { uploadImageRequest } from "../../Services/dataService";
+import { NETWORK_ERROR } from "../../Utilities/constants";
+import {
+  createProductRequest,
+  listProductRequest,
+} from "../../Services/dataService";
+
+import { connect } from "react-redux";
+import { createProduct } from "../../Redux/actions/action";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
@@ -45,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CreateProduct = () => {
+const CreateProduct = (props) => {
   const classes = useStyles();
 
   //state variables
@@ -72,13 +82,20 @@ const CreateProduct = () => {
 
   const [section, setSection] = React.useState("");
 
-  const [categories, setCategories] = React.useState("");
-  const [subCategories, setSubCategories] = React.useState("");
+  const [categories, setCategories] = React.useState();
+  const [subCategories, setSubCategories] = React.useState();
 
-  const [On_Sale, setOn_Sale] = React.useState("");
+  const [On_Sale, setOn_Sale] = React.useState(false);
   const [variation, setVariation] = React.useState([]);
 
   const [saleStartDate, setSaleStartDate] = React.useState();
+  const [saleEndDate, setSaleEndDate] = React.useState();
+
+  const [response, setResponse] = React.useState(false);
+  const [imageUrl, setImageUrl] = React.useState([
+    "https://ashtex-test-bucket.s3.amazonaws.com/data/Screenshot%20%281%29.png",
+  ]);
+
   //onChange Event Handlers
 
   const onChange = (e) => {
@@ -102,7 +119,9 @@ const CreateProduct = () => {
 
   const handleChangeCatagories = (event) => {
     setCategoryFlag(true);
-    setCategories(event);
+
+    let categoriesVar = event;
+    setCategories(categoriesVar);
   };
 
   const handleChangeSubCatagories = (event) => {
@@ -111,15 +130,44 @@ const CreateProduct = () => {
   };
 
   const handleChangeOnSale = (event) => {
-    setOn_Sale(event.target.value);
+    const val = event.target.value == "true" ? true : false;
+    setOn_Sale(val);
   };
 
-  
-  const startDateHandler = (event) => { 
+  const startDateHandler = (event) => {
+    let saleStartDateV = event.target.value;
+    setSaleStartDate(saleStartDateV);
+  };
 
-    let saleStartDateV=event.target.value;    
-    setSaleStartDate(saleStartDateV);    
-    
+  const endDateHandler = (event) => {
+    let saleEndDateVar = event.target.value;
+    setSaleEndDate(saleEndDateVar);
+  };
+
+  const imageUrlHandler = (picture) => {
+    picture.map((pic) => {
+      fileSelectedHandler(pic);
+    });
+  };
+
+  const fileSelectedHandler = async (file) => {
+    const token =
+      "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
+    const formData = new FormData();
+    formData.append("file", file);
+    if (file !== "") {
+      setResponse(true);
+      const imageResponse = await uploadImageRequest(formData, token);
+
+      if (imageResponse === NETWORK_ERROR) {
+        alert("NETWORK_ERROR");
+        setResponse(false);
+      } else {
+        alert("IMAGE_UPLOAD_SUCCESS");
+        // props.uploadImage(imageResponse)
+        setResponse(false);
+      }
+    }
   };
 
   // const isCategoryOption =(value) =>{
@@ -244,12 +292,8 @@ const CreateProduct = () => {
       products.price.length === 0 ||
       products.old_price.length === 0 ||
       products.brand.length === 0 ||
-      (products.on_sale &&
-        (products.sale_end_time.length === 0 ||
-          products.sale_start_time.length === 0)) ||
       products.section.length === 0 ||
       products.shipping_info.length === 0 ||
-      products.on_sale.length === 0 ||
       products.sku.length === 0 ||
       products.categories.length === 0
     )
@@ -257,7 +301,7 @@ const CreateProduct = () => {
     else return true;
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     let size_arr = [];
     let state_size = variation;
@@ -276,30 +320,46 @@ const CreateProduct = () => {
       old_price,
       shipping_info,
       sale_percentage,
-      category,
       sku,
-      sale_start_time,
-      sale_end_time,
     } = inputValueState.inputValues;
 
     let products = {
       title: title,
       description: description,
       price: price,
+      images: imageUrl,
       old_price: old_price,
       brand: brand,
-      category: categories,
+      categories: categories,
+      subCategories: subCategories,
       section: section,
       variation: size_arr,
       shipping_info: shipping_info,
       sale_percentage: sale_percentage,
+      type: [],
       added_by: "SuperAdmin",
       sku: sku,
-      sale_start_time: sale_start_time,
-      sale_end_time: sale_end_time,
+      on_sale: On_Sale,
+      sale_start_time: saleStartDate,
+      sale_end_time: saleEndDate,
     };
+    
+    // let values_validation= validate_form(products);
 
-    let values_validation= validate_form(products);
+    if (true) {
+      const token =
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
+      let createProductResponse = await createProductRequest(products, token);
+
+      if (createProductResponse === NETWORK_ERROR) {
+        alert("NETWORK_ERROR");
+      } else {
+        const status = createProductResponse.data.metadata.status;
+        const sms = createProductResponse.data.metadata.message;
+        
+      }
+    } else {
+    }
   };
 
   return (
@@ -428,9 +488,9 @@ const CreateProduct = () => {
                   value={section}
                   onChange={handleChangeSection}
                 >
-                  <MenuItem value={"men"}>Men</MenuItem>
-                  <MenuItem value={"women"}>Women</MenuItem>
-                  <MenuItem value={"both"}>Both</MenuItem>
+                  <MenuItem value={"Men"}>Men</MenuItem>
+                  <MenuItem value={"Women"}>Women</MenuItem>
+                  <MenuItem value={"Both"}>Both</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -443,7 +503,7 @@ const CreateProduct = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={categories}
+                  // value={categories}
                   // onChange={handleChangeCatagories}
                   onChange={(e) => {
                     setCategoryFlag(false);
@@ -491,43 +551,44 @@ const CreateProduct = () => {
                   value={On_Sale}
                   onChange={handleChangeOnSale}
                 >
-                  <MenuItem value={"yes"}>Yes</MenuItem>
-                  <MenuItem value={"no"}>No</MenuItem>
+                  <MenuItem value="true">Yes</MenuItem>
+                  <MenuItem value="false">No</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
 
-            
-            {On_Sale==='yes'?(
+            {On_Sale ? (
               <React.Fragment>
-              <Grid item xs={12} sm={12}>
-              <TextField
-                id="date"
-                label="Sale Start Date"
-                type="date"
-                defaultValue="2017-05-24"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={(e)=>{startDateHandler(e)}}
-              />
-              <TextField
-                id="date"
-                label="Sale end Date"
-                type="date"
-                defaultValue="2017-05-24"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            </React.Fragment>):null
-            }
-            
-
-              
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    id="date"
+                    label="Sale Start Date"
+                    type="date"
+                    defaultValue="2017-05-24"
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => {
+                      startDateHandler(e);
+                    }}
+                  />
+                  <TextField
+                    id="date"
+                    label="Sale end Date"
+                    type="date"
+                    defaultValue="2017-05-24"
+                    className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onChange={(e) => {
+                      endDateHandler(e);
+                    }}
+                  />
+                </Grid>
+              </React.Fragment>
+            ) : null}
 
             <Grid item xs={12} sm={6}>
               <div className={classes.root}>
@@ -537,13 +598,16 @@ const CreateProduct = () => {
                   id="contained-button-file"
                   multiple
                   type="file"
+                  onChange={(picture) => {
+                    imageUrlHandler(picture);
+                  }}
                 />
                 <label htmlFor="contained-button-file">
                   <Button variant="contained" color="primary" component="span">
                     Upload
                   </Button>
                 </label>
-                <input
+                {/* <input
                   accept="image/*"
                   className={classes.input}
                   id="icon-button-file"
@@ -557,7 +621,7 @@ const CreateProduct = () => {
                   >
                     <PhotoCamera />
                   </IconButton>
-                </label>
+                </label> */}
               </div>
             </Grid>
 
