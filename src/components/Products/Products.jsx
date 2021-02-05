@@ -19,6 +19,9 @@ import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
 import CreateProduct from "./CreateProduct";
 
+import { singleProduct  } from "../../Redux/actions/action";
+import { deleteProductRequest } from "../../Services/dataService";
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -38,6 +41,32 @@ const Products = (props) => {
     }
   }, []);
 
+  const editHandler =(product_id) =>{
+
+    if(product_id === null){
+      props.history.push("/products");
+    }
+    else{
+        props.singleProduct(product_id);
+        props.history.push("/EditProduct", product_id);
+    }
+  }
+
+  const deleteHandler = async (product_id) =>{
+    const obj = {
+      _id:product_id,
+      };
+     
+      const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
+      const deleteResponse = await deleteProductRequest(obj, token);
+      const productResponse = await listProductRequest(token);
+      if (productResponse === NETWORK_ERROR) {
+      } else {
+        props.listOfProductsHandler(productResponse.data.payload.data);
+        
+      }
+  }
+
   return (
     <div>
       <Header>
@@ -50,7 +79,7 @@ const Products = (props) => {
         <Grid container spacing={3}>
           {props.ListProducts.map((list) => (
             <Grid item md={4}>
-              <Card className={classes.root} key={Math.random()}>
+              <Card className={classes.root} key={list._id}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
@@ -81,11 +110,23 @@ const Products = (props) => {
                 </CardActionArea>
                 <CardActions>
                   <Link to="/EditProduct">
-                    <Button size="small" color="primary">
+                    <Button size="small" color="primary" 
+                      onClick={
+                        ()=>{
+                          editHandler(list._id)
+                        }
+                      }
+                      >
                       Edit
                     </Button>
                   </Link>
-                  <Button size="small" color="primary">
+                  <Button size="small" color="primary"
+                  onClick={
+                   
+                      deleteHandler(list._id)
+                    
+                  }
+                  >
                     Remove
                   </Button>
                 </CardActions>
@@ -101,13 +142,14 @@ const Products = (props) => {
 const mapStateToProps = (state) => {
   return {
     ListProducts: state.myReducerOne.listOfProducts,
+    singleProduct: state.myReducerOne.singleProduct,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    listOfProductsHandler: (ProductsList) =>
-      dispatch(listOfProducts(ProductsList)),
+    listOfProductsHandler: (ProductsList) => dispatch(listOfProducts(ProductsList)),
+    singleProduct: (productData) => dispatch(singleProduct(productData)),
   };
 };
 

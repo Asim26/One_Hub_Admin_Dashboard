@@ -14,3 +14,5 @@ export const BRAND_PRODUCTS = "admin/api/v1/brands/products";
 export const FETECH_REPORT = "admin/api/v1/fetchReport";
 export const UPLOAD_IMAGE_URL = "admin/api/v1/upload";
 export const CREATE_PRODUCT = "admin/api/v1/createProduct";
+export const EDIT_PRODUCT = "admin/api/v1/editProduct";
+export const DELETE_PRODUCT = "admin/api/v1/deleteProduct";

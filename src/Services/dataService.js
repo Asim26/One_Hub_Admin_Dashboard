@@ -11,7 +11,9 @@ import { BASE_URL1,
    BRAND_PRODUCTS,
    FETECH_REPORT,
    UPLOAD_IMAGE_URL,
-   CREATE_PRODUCT
+   CREATE_PRODUCT,
+   EDIT_PRODUCT,
+   DELETE_PRODUCT
   } from "../Utilities/constants";
 
 import { NETWORK_ERROR } from "../Utilities/constants";
@@ -175,6 +177,35 @@ export async function createProductRequest(obj,token) {
 
   try {
     const url = BASE_URL1 + CREATE_PRODUCT;
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+
+export async function editProductRequest(obj, token) {
+  try {
+    const url = BASE_URL1 + EDIT_PRODUCT;
+    const config = {
+      headers: {
+        "x-access-token": "bearer " + token,
+      },
+    };
+    return await axios.post(url, obj, config);
+  } catch (e) {
+    return NETWORK_ERROR;
+  }
+}
+
+export async function deleteProductRequest(obj,token) {
+  const config = {
+    headers: {
+      "x-access-token": "bearer " + token,
+    },
+  };
+
+  try {
+    const url = BASE_URL1 + DELETE_PRODUCT;
     return await axios.post(url, obj, config);
   } catch (e) {
     return NETWORK_ERROR;

@@ -3,7 +3,8 @@ import {
   FETCH_ORDER_SUMMARY,
   LIST_OF_PRODUCTS,
   LIST_OF_ORDERS,
-  CREATE_PRODUCT
+  CREATE_PRODUCT,
+  SINGLE_PRODUCT
 } from "./action-types";
 
 export function loginSuccess(data) {
@@ -37,6 +38,13 @@ export function listOfOrders(data) {
 export function createProduct(data) {
   return {
     type: CREATE_PRODUCT,
+    payload: data,
+  };
+}
+
+export function singleProduct(data) {
+  return {
+    type: SINGLE_PRODUCT,
     payload: data,
   };
 }

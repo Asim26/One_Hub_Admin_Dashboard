@@ -344,9 +344,9 @@ const CreateProduct = (props) => {
       sale_end_time: saleEndDate,
     };
     
-    // let values_validation= validate_form(products);
+     let values_validation= validate_form(products);
 
-    if (true) {
+    if (values_validation) {
       const token =
         "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
       let createProductResponse = await createProductRequest(products, token);
@@ -356,7 +356,7 @@ const CreateProduct = (props) => {
       } else {
         const status = createProductResponse.data.metadata.status;
         const sms = createProductResponse.data.metadata.message;
-        
+        alert('product added');
       }
     } else {
     }
@@ -641,7 +641,7 @@ const CreateProduct = (props) => {
                   item
                   xs={12}
                   sm={12}
-                  style={{ border: "3px solid blue", background: "#ffff" }}
+                  style={{ border: "3px solid blue", background: "#ffff", marginBottom:'6px' }}
                   key={count._id}
                 >
                   <TextField
