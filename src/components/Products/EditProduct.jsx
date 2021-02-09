@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from "react";
 import Header from "../Header/Header";
 
 import Grid from "@material-ui/core/Grid";
@@ -13,7 +13,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 import { uploadImageRequest } from "../../Services/dataService";
 import { NETWORK_ERROR } from "../../Utilities/constants";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import { sectionOptions } from "../../Utilities/optionsConstants";
 import { editProductRequest } from "../../Services/dataService";
 
@@ -46,93 +46,100 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const EditProduct = (props) => {
+  const classes = useStyles();
 
-    const classes = useStyles();
-    
-    const [inputValuesState, setInputValuesState] = useState({
-      inputValues:{
-          title : "",
-          description : "",
-          price : "",
-          old_price : "",
-          shipping_info:"",
-          sale_percentage : "",
-          type: "",
-          sku:"",
-          sale_start_time:"",
-          sale_end_time: "",
-      }
-  })
+  const [inputValuesState, setInputValuesState] = useState({
+    inputValues: {
+      title: "",
+      description: "",
+      price: "",
+      old_price: "",
+      shipping_info: "",
+      sale_percentage: "",
+      type: "",
+      sku: "",
+      sale_start_time: "",
+      sale_end_time: "",
+    },
+  });
 
-  const [brand, setBrand] = useState("");  
+  const [brand, setBrand] = useState("");
   const [section, setSection] = useState("");
-  const [image, setImage] = useState("https://ashtex-test-bucket.s3.amazonaws.com/data/Screenshot%20%281%29.png");
- 
-    // CategoryFlag
-    const [categoryFlag, setCategoryFlag] = useState(false);
-    const [subCategoryFlag, setSubCategoryFlag] = useState(false);
-  
-    const [categories, setCategories] = useState("");
-    const [subCategories, setSubCategories] = useState();
-  
-    const [On_Sale, setOn_Sale] = useState(false);
-    const [variation, setVariation] = useState([]);
-  
-    const [saleStartDate, setSaleStartDate] = useState();
-    const [saleEndDate, setSaleEndDate] = useState();
-  
-    const [response, setResponse] = useState(false);
-    const [imageUrl, setImageUrl] = useState([
-      "https://ashtex-test-bucket.s3.amazonaws.com/data/Screenshot%20%281%29.png",
-    ]);   
-  
+  const [image, setImage] = useState(
+    "https://ashtex-test-bucket.s3.amazonaws.com/data/Screenshot%20%281%29.png"
+  );
 
+  // CategoryFlag
+  const [categoryFlag, setCategoryFlag] = useState(false);
+  const [subCategoryFlag, setSubCategoryFlag] = useState(false);
 
+  const [categories, setCategories] = useState("");
+  const [subCategories, setSubCategories] = useState();
+
+  const [On_Sale, setOn_Sale] = useState(false);
+  const [variation, setVariation] = useState([]);
+
+  const [saleStartDate, setSaleStartDate] = useState();
+  const [saleEndDate, setSaleEndDate] = useState();
+
+  const [response, setResponse] = useState(false);
+  const [imageUrl, setImageUrl] = useState([
+    "https://ashtex-test-bucket.s3.amazonaws.com/data/Screenshot%20%281%29.png",
+  ]);
+
+  const { singleProduct, ListProducts } = props;
+  const product = ListProducts.filter((x) => x._id === singleProduct);
+
+  useEffect(() => {
     const { singleProduct, ListProducts } = props;
-    const product = ListProducts.filter(x=>x._id ===singleProduct);
-    
-    useEffect(()=>{
+    const product = ListProducts.filter((x) => x._id === singleProduct);
+    const variation = product[0].variation;
+    setVariation(variation);
 
-        const { singleProduct, ListProducts } = props;
-        const product = ListProducts.filter(x=>x._id ===singleProduct);
-        const variation = product[0].variation;
-        setVariation(variation)
-        
-        const {title,on_sale, description, price, old_price, brand, shipping_info, sale_percentage,images, sku
-          ,sub_categories, categories, type, sale_start_time, sale_end_time,section} = product[0];
-          let sale =on_sale==true?"true":"false";
-          
-          setOn_Sale(sale);
-          let cat = ""+categories[0];
-          setCategories(cat)
-          
+    const {
+      title,
+      on_sale,
+      description,
+      price,
+      old_price,
+      brand,
+      shipping_info,
+      sale_percentage,
+      images,
+      sku,
+      sub_categories,
+      categories,
+      type,
+      sale_start_time,
+      sale_end_time,
+      section,
+    } = product[0];
+    let sale = on_sale == true ? "true" : "false";
 
-          
-          const propsInputValues={
-            title: title,
-            description: description,
-            price: price,
-            old_price: old_price,
-            shipping_info: shipping_info,
-            sale_percentage: sale_percentage,
-            sku: sku,
-            sale_start_time:sale_start_time,
-            sale_end_time: sale_end_time,
-          }
+    setOn_Sale(sale);
+    let cat = "" + categories[0];
+    setCategories(cat);
 
-          setInputValuesState({inputValues: propsInputValues})
-          setBrand(brand)
-          setSection(section)
-          setImage(image)
+    const propsInputValues = {
+      title: title,
+      description: description,
+      price: price,
+      old_price: old_price,
+      shipping_info: shipping_info,
+      sale_percentage: sale_percentage,
+      sku: sku,
+      sale_start_time: sale_start_time,
+      sale_end_time: sale_end_time,
+    };
 
-        
+    setInputValuesState({ inputValues: propsInputValues });
+    setBrand(brand);
+    setSection(section);
+    setImage(image);
+  }, []);
 
-    },[]) 
-   
-
-    //onChange Event Handlers
+  //onChange Event Handlers
 
   const onChange = (e) => {
     e.preventDefault();
@@ -322,18 +329,17 @@ const EditProduct = (props) => {
     return stock_arr;
   };
 
-  const parsingDate = (date) =>{
-    if(date){
-      let short_date="";
-      for(let i=0; i<date.length; i++){
-          if(date[i]==="T")
-            break;
+  const parsingDate = (date) => {
+    if (date) {
+      let short_date = "";
+      for (let i = 0; i < date.length; i++) {
+        if (date[i] === "T") break;
         short_date += date[i];
       }
       return short_date;
     }
-    return ""
-  }
+    return "";
+  };
 
   const validate_form = (products) => {
     if (
@@ -393,47 +399,44 @@ const EditProduct = (props) => {
       sale_start_time: saleStartDate,
       sale_end_time: saleEndDate,
     };
-    
-     let values_validation= validate_form(products);
 
-     let edit_product= {
-      _id:singleProduct,
-      product:products
-    }
+    let values_validation = validate_form(products);
 
+    let edit_product = {
+      _id: singleProduct,
+      product: products,
+    };
 
-    const token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
-    let editProductResponse = await editProductRequest(edit_product,token);
-  
-    if (editProductResponse === NETWORK_ERROR) {
-      alert("NETWORK_ERROR");
-      
-    } 
-    else {
+    if (values_validation) {
+      const token =
+        "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InN0YXR1cyI6IkFjdGl2ZSIsIl9pZCI6IjVmMmVmOTZkNWEwOWM1MzUyY2E1NmNkMSIsImVtYWlsIjoiYWRtaW5AeWFob28uY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkY1BaSkxoc3dLSndiaHF5aWJ6TGIwZTh6S05mVFFpcHdieE55L1Uyd25rS3ZIOHhnallsZUMiLCJyb2xlIjoiU3VwZXJBZG1pbiIsImFkZGVkX2RhdGUiOiIyMDIwLTA4LTA4VDE5OjEzOjQ5LjMyNVoiLCJfX3YiOjB9LCJpYXQiOjE2MTE3NTM3NTcsImF1ZCI6ImFkbWluIiwiaXNzIjoibm9kZV9iYWNrZW5kIiwic3ViIjoiYWRtaW5AeWFob28uY29tIn0.Al0uRnNcrAK8GZumRVbMgS1O8buvmZL2mGmnSueyIWSyi4MX0HaRe9oFH9jLLSzDdSR1cAz-NZxdydAHKRYTLg";
+      let editProductResponse = await editProductRequest(edit_product, token);
+
+      if (editProductResponse === NETWORK_ERROR) {
+        alert("NETWORK_ERROR");
+      } else {
         const status = editProductResponse.data.metadata.status;
         const sms = editProductResponse.data.metadata.message;
 
-          if (status === "SUCCESS") {
-            // props.editProduct(editProductResponse);
-            // props.history.push("/products");
-            alert('record updated')
-          }
-          else{
-            alert('failure error')
-          }
+        if (status === "SUCCESS") {
+          // props.editProduct(editProductResponse);
+          // props.history.push("/products");
+          alert("record updated");
+        } else {
+          alert("EDIT EQUEST FAILED");
+        }
       }
-  
+    } else {
+      alert("Please fill up all the fields to proceed");
+    }
   };
 
+  return (
+    <div>
+      <Header>
+        <h2>Edit Product</h2>
 
-
-  
-    return (
-        <div>
-            <Header>
-                <h2>Edit Product</h2>
-
-                <form onSubmit={submitHandler}>
+        <form onSubmit={submitHandler}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -563,7 +566,6 @@ const EditProduct = (props) => {
                   // placeholder={product[0].section}
                   // onChange={handleChangeSection}
                   // options={sectionOptions}
-                  
                 >
                   <MenuItem value={"Men"}>Men</MenuItem>
                   <MenuItem value={"Women"}>Women</MenuItem>
@@ -580,15 +582,13 @@ const EditProduct = (props) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                   value={categories}
+                  value={categories}
                   // onChange={handleChangeCatagories}
                   onChange={(e) => {
                     setCategoryFlag(false);
                     handleChangeCatagories(e.target.value);
                   }}
-                  
                 >
-
                   <MenuItem value="eastern">Eastern</MenuItem>
                   <MenuItem value="western">Western</MenuItem>
                   <MenuItem value="footwear">Footwear</MenuItem>
@@ -627,10 +627,10 @@ const EditProduct = (props) => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                   value={On_Sale}
-                  onChange={(e)=>{
-                    handleChangeOnSale(e)}}
-                  
+                  value={On_Sale}
+                  onChange={(e) => {
+                    handleChangeOnSale(e);
+                  }}
                 >
                   <MenuItem value="true">Yes</MenuItem>
                   <MenuItem value="false">No</MenuItem>
@@ -640,7 +640,7 @@ const EditProduct = (props) => {
 
             {/* On_Sale */}
 
-            { product[0].on_sale? (
+            {product[0].on_sale ? (
               <React.Fragment>
                 <Grid item xs={12} sm={12}>
                   <input
@@ -658,7 +658,7 @@ const EditProduct = (props) => {
                     }}
                     defaultValue={parsingDate(product[0].sale_start_time)}
                   />
-                  
+
                   <input
                     id="date"
                     label="Sale end Date"
@@ -728,7 +728,11 @@ const EditProduct = (props) => {
                   item
                   xs={12}
                   sm={12}
-                  style={{ border: "3px solid blue", background: "#ffff", marginBottom:'6px' }}
+                  style={{
+                    border: "3px solid blue",
+                    background: "#ffff",
+                    marginBottom: "6px",
+                  }}
                   key={count._id}
                 >
                   <TextField
@@ -834,18 +838,15 @@ const EditProduct = (props) => {
             </Grid>
           </Grid>
         </form>
-
-            </Header>
-        </div>
-    )
-}
-
-
+      </Header>
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => {
   return {
     ListProducts: state.myReducerOne.listOfProducts,
-    singleProduct:state.myReducerOne.singleProduct,
+    singleProduct: state.myReducerOne.singleProduct,
   };
 };
 

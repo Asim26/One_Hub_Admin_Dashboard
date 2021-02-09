@@ -24,7 +24,7 @@ import {
 } from "../../Services/dataService";
 
 import { connect } from "react-redux";
-import { createProduct } from "../../Redux/actions/action";
+import { createProduct, listOfProducts } from "../../Redux/actions/action";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,8 +82,8 @@ const CreateProduct = (props) => {
 
   const [section, setSection] = React.useState("");
 
-  const [categories, setCategories] = React.useState();
-  const [subCategories, setSubCategories] = React.useState();
+  const [categories, setCategories] = React.useState([]);
+  const [subCategories, setSubCategories] = React.useState([]);
 
   const [On_Sale, setOn_Sale] = React.useState(false);
   const [variation, setVariation] = React.useState([]);
@@ -343,8 +343,8 @@ const CreateProduct = (props) => {
       sale_start_time: saleStartDate,
       sale_end_time: saleEndDate,
     };
-    
-     let values_validation= validate_form(products);
+
+    let values_validation = validate_form(products);
 
     if (values_validation) {
       const token =
@@ -356,9 +356,20 @@ const CreateProduct = (props) => {
       } else {
         const status = createProductResponse.data.metadata.status;
         const sms = createProductResponse.data.metadata.message;
-        alert('product added');
+
+        if (status === "SUCCESS") {
+          const productResponse = await listProductRequest(token);
+          if (productResponse === NETWORK_ERROR) {
+            alert(NETWORK_ERROR);
+          } else {
+            props.listOfProductsHandler(productResponse);
+            alert("product added");
+            props.history.push("/products");
+          }
+        }
       }
     } else {
+      alert("Please Fill up the fields to proceed ");
     }
   };
 
@@ -428,14 +439,14 @@ const CreateProduct = (props) => {
                   value={brand}
                   onChange={handleChangeBrand}
                 >
-                  <MenuItem value={"puma"}>Puma</MenuItem>
-                  <MenuItem value={"nike"}>Nike</MenuItem>
-                  <MenuItem value={"bottles"}>Bottles</MenuItem>
-                  <MenuItem value={"adidas"}>Adidas</MenuItem>
-                  <MenuItem value={"H & M"}>H & M</MenuItem>
-                  <MenuItem value={"shein"}>Shein</MenuItem>
-                  <MenuItem value={"stylo"}>Stylo</MenuItem>
-                  <MenuItem value={"breakout"}>BreakOut</MenuItem>
+                  <MenuItem value="Puma">Puma</MenuItem>
+                  <MenuItem value="Nike">Nike</MenuItem>
+                  <MenuItem value="Bottles">Bottles</MenuItem>
+                  <MenuItem value="Adidas">Adidas</MenuItem>
+                  <MenuItem value="H & M">H & M</MenuItem>
+                  <MenuItem value="Shein">Shein</MenuItem>
+                  <MenuItem value="Stylo">Stylo</MenuItem>
+                  <MenuItem value="Breakout">BreakOut</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -510,12 +521,12 @@ const CreateProduct = (props) => {
                     handleChangeCatagories(e.target.value);
                   }}
                 >
-                  <MenuItem value={"eastern"}>Eastern</MenuItem>
-                  <MenuItem value={"western"}>Western</MenuItem>
-                  <MenuItem value={"footwear"}>Footwear</MenuItem>
-                  <MenuItem value={"activewear"}>Activewear</MenuItem>
-                  <MenuItem value={"face+body"}>Face + Body</MenuItem>
-                  <MenuItem value={"accessories"}>Accessories</MenuItem>
+                  <MenuItem value="eastern">Eastern</MenuItem>
+                  <MenuItem value="western">Western</MenuItem>
+                  <MenuItem value="footwear">Footwear</MenuItem>
+                  <MenuItem value="activewear">Activewear</MenuItem>
+                  <MenuItem value="face+body">Face + Body</MenuItem>
+                  <MenuItem value="accessories">Accessories</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -641,7 +652,11 @@ const CreateProduct = (props) => {
                   item
                   xs={12}
                   sm={12}
-                  style={{ border: "3px solid blue", background: "#ffff", marginBottom:'6px' }}
+                  style={{
+                    border: "3px solid blue",
+                    background: "#ffff",
+                    marginBottom: "6px",
+                  }}
                   key={count._id}
                 >
                   <TextField
@@ -747,4 +762,11 @@ const CreateProduct = (props) => {
     </div>
   );
 };
-export default CreateProduct;
+// export default CreateProduct;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    listOfProductsHandler: (ProductsList) =>
+      dispatch(listOfProducts(ProductsList)),
+  };
+};
+export default connect(null, mapDispatchToProps)(CreateProduct);
