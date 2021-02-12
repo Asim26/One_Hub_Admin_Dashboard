@@ -13,9 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import {CLIENT_ID} from '../../Utilities/constants';
-import { loginRequest } from "../../Services/dataService";
-import { NETWORK_ERROR } from "../../Utilities/constants";
+import {CLIENT_ID} from '../../Utilities/constant';
+import { loginRequest } from "../../Services/data";
+import { NETWORK_ERROR } from "../../Utilities/constant";
 
 function Copyright() {
   return (
